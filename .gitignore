@@ -1,0 +1,12 @@
+*.o
+*.mod
+*.bat
+*.pdf
+VA_contrasteACT/
+VA_variandoRho/
+VA_variandoV0/
+paraEntregar/
+Pruebas/
+.ipynb_checkpoints/
+Graficos a hacer.txt
+__pycache__/
