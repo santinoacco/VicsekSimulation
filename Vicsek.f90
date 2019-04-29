@@ -147,7 +147,7 @@ do temp=1,ptos !cantidad de puntos con distinto ruido
     write(*,*) 'eta:', eta(temp)
     write(*,*)
     dv=0
-    G=1.2
+
     do t=1,tfin
         
         ! a partir de acá lo que sería un MCS, xq muevo todas las part a la vez

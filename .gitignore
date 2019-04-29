@@ -2,6 +2,7 @@
 *.mod
 *.bat
 *.pdf
+*.exe
 VA_contrasteACT/
 VA_variandoRho/
 VA_variandoV0/
@@ -10,3 +11,5 @@ Pruebas/
 .ipynb_checkpoints/
 Graficos a hacer.txt
 __pycache__/
+Crudos*
+Acorr*
