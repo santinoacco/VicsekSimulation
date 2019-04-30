@@ -54,6 +54,7 @@ read(200,*) auxread, tfin
 read(200,*) auxread, midoCada
 read(200,*) auxread, corrida
 read(200,*) auxread, arch_outSim
+
 ! read(*,*) auxread, N
 ! read(*,*) auxread, V0
 ! read(*,*) auxread, L
