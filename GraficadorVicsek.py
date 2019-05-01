@@ -16,13 +16,14 @@ import math
 
 
 
+
 nroFilesA=0
 nroFilesV=0
 
 InFile=[]
 AngInFiles=[]
 VecInFiles=[]
-nroFilesA=0
+#nroFilesA=0
 for j in range(10,15):
     namearch  = 'VAvsV_variandoN\Entrada_Parametros_Vicsek'+str(j)+'.dat'
     acorrFile='VAvsV_variandoN\Acorr_VA'+str(j)+'.dat'
@@ -52,14 +53,16 @@ MidoCada=[]
 
 
 
-VA_OBJ=[]
+
 parameters=[]
 for j in range(nroFilesA):
     MSP.ReadParameters(InFile[j],N,v0,rho,MidoCada,True)    
     parameters.append([N[j],v0[j],rho[j],MidoCada[j]])
 
+VA_OBJ=[]
 tACTANG=[]
 ACTANG=[]
+ACTVEC=[]
 for j in range(nroFilesA):
     
     VA_OBJ.append(MSP.AnalysisVicsek(j,AngInFiles[j],'A',parameters[j]))
@@ -73,31 +76,17 @@ eta=VA_OBJ[0].vicsekNoise
 
 
 labels = [r'$\eta = %s$' % eta[j] for j in range(len(eta))]
-graficoACT=[]
 formatACT=['k.-','r.-','m.-','c.-','b.-','g.-','y.-','gv-','kv-','rv-']
-for k in range(nroFilesA):
-    tituloAcorr='$N = %s$'% N[k]
-    graficoACT.append(
-            [[tACTANG[k],ACTANG[k][j],None,formatACT[j],labels[j]]
-            for j in range(len(eta))]
-            )
-    MSP.Graficador(graficoACT[k],'$t [MCS]$','$Acorr$',tituloAcorr)
-    
-# =============================================================================
-# for k in range(nroFilesA): 
-#     tituloAcorr='$N = %s$'% N[k]
-#     [plt.errorbar(tACTANG[k],
-#                   ACTANG[k][j],
-#                   yerr=None,
-#                   fmt='.-',
-#                   label=labels[j]) for j in range(len(eta))]
-#     plt.xlabel('$t [MCS]$',fontsize = 20)
-#     plt.ylabel('$Acorr$',fontsize = 20)
-#     plt.title(tituloAcorr)
-#     plt.legend()
-#     plt.show()
-# =============================================================================
 
+graficoACT_A=[]
+for k in range(nroFilesA):
+    tituloAcorr=r'Anuglar - $N = %s$, $\rho = %s$' %(N[k],rho[k])
+    graficoACT_A.append(
+            [[tACTANG[k],ACTANG[k][j],None,formatACT[j],labels[j]]
+            for j in range(0,len(eta),3)]
+            )
+    plt.figure(k)
+    MSP.Graficador(graficoACT_A[k],'$t [MCS]$','$Acorr$',tituloAcorr)
 '''para ajustar'''    
 def f(x,tau,b,y0): 
     return b*np.exp(-x/tau) + y0
@@ -107,9 +96,11 @@ initGuessA=[[[MidoCada[k],ACTANG[k][j][0],0] for j in range(len(eta))]for k in r
 # obtener el tiempo de eq. para cada curva de ACT
 tauEq_A=[VA_OBJ[k].get_tauEq(f,initGuessA[k]) for k in range(nroFilesA)]
 
-initGuessV=[[[MidoCada[k],ACTVEC[k][j][0],0] for j in range(len(eta))]for k in range(nroFilesV)]#semilla para el ajuste  
-# obtener el tiempo de eq. para cada curva de ACT
-tauEq_V=[VA_OBJ[k].get_tauEq(f,initGuessV[k]) for k in range(nroFilesV)]
+# =============================================================================
+# initGuessV=[[[MidoCada[k],ACTVEC[k][j][0],0] for j in range(len(eta))]for k in range(nroFilesV)]#semilla para el ajuste  
+# # obtener el tiempo de eq. para cada curva de ACT
+# tauEq_V=[VA_OBJ[k].get_tauEq(f,initGuessV[k]) for k in range(nroFilesV)]
+# =============================================================================
 
 # utilizar tauEq_A para calcular los valores medios
 
