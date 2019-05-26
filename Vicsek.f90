@@ -169,20 +169,14 @@ do temp=1,ptos !cantidad de puntos con distinto ruido
 
             vx=0
             vy=0
-            ! vvx=0
-            ! vvy=0
             do i=1,N
                 vx(j)=vx(j)+v(i,1)
                 vy(j)=vy(j)+v(i,2)
-                ! vvx(j)=vvx(j) + v(i,1)*v(i,1)
-                ! vvy(j)=vvy(j) + v(i,2)*v(i,2)
                 enddo
 
             ! CALCULAR P.O temporal
             phi_mod(j,temp)= sqrt(vx(j)*vx(j)+vy(j)*vy(j))/real(N*V0)
-            ! phiSqr_mod(j,temp)= sqrt(vvx(j)*vvx(j)+vvy(j)*vvy(j))/real((N*V0)**2)
-            ! phiSqr_mod(j,temp)= sqrt((vx(j)*vx(j)+vy(j)*vy(j))**2)/real((N*V0)**2)
-            phiSqr_mod(j,temp)= phi_mod(j,temp)**2 ! esto es lo que creo que corresponde.. consultar por las dudas
+            ! phiSqr_mod(j,temp)= phi_mod(j,temp)**2 ! esto es lo que creo que corresponde.. consultar por las dudas
             end if
         end do
     end do
@@ -193,35 +187,35 @@ deallocate(vy)
 ! deallocate(vvx)
 ! deallocate(vvy)
 deallocate(dv)
-! ================ CALCULAMOS AutoCorrelacionTemporal ================ !
-! dimACTc=dim_vec_eq/2!esto es xq se suele calcular hasta la mitad del vector, luego tengo pocos datos
-! dimACTc=dim_vec_eq/2  !checkear q no sea dim_vec_eq/2-1
+! ! ================ CALCULAMOS AutoCorrelacionTemporal ================ !
+! ! dimACTc=dim_vec_eq/2!esto es xq se suele calcular hasta la mitad del vector, luego tengo pocos datos
+! ! dimACTc=dim_vec_eq/2  !checkear q no sea dim_vec_eq/2-1
 
-dimACTc=dimMido/2
-allocate(ACTc(dimACTc,ptos))
-allocate(tt(dimACTc))
-ACTc=0
-do temp=1,ptos
-    call ACTc_Barkema(phi_mod(:,temp),ACTc(:,temp))
-    end do
-do t = 1,dimACTc
-    tt(t)=t
-    enddo
+! dimACTc=dimMido/2
+! allocate(ACTc(dimACTc,ptos))
+! allocate(tt(dimACTc))
+! ACTc=0
+! do temp=1,ptos
+!     call ACTc_Barkema(phi_mod(:,temp),ACTc(:,temp))
+!     end do
+! do t = 1,dimACTc
+!     tt(t)=t
+!     enddo
 
 ! ESCRIBIR EN EL ARCHIVO DE SALIDA LOS DATOS
 open(250,file=arch_outSim)
 call SalidaDatosTabla_tvsX(250,tV,phi_mod,eta,'(A3,999(X,f5.2,X))','(A1,999(X,A5,A1,f4.2,A1))','eta','|phi|')
 close(250)
 
-open(270,file=arch_outSim_Sqr)
-call SalidaDatosTabla_tvsX(270,tV,phiSqr_mod,eta,'(A3,999(X,f5.2,X))','(A1,999(X,A9,A1,f4.2,A1))','eta','|phi^2|')
-close(270)
+! open(270,file=arch_outSim_Sqr)
+! call SalidaDatosTabla_tvsX(270,tV,phiSqr_mod,eta,'(A3,999(X,f5.2,X))','(A1,999(X,A9,A1,f4.2,A1))','eta','|phi^2|')
+! close(270)
 
-open(300,file=arch_ACT)
-call SalidaDatosTabla_tvsX(300,tt,ACTc,eta,'(A3,999(X,f5.2,X))','(A1,999(X,A4,A1,f4.2,A1))','eta','ACTc')
-close(300)
-deallocate(ACTc)
-deallocate(tt)
+! open(300,file=arch_ACT)
+! call SalidaDatosTabla_tvsX(300,tt,ACTc,eta,'(A3,999(X,f5.2,X))','(A1,999(X,A4,A1,f4.2,A1))','eta','ACTc')
+! close(300)
+! deallocate(ACTc)
+! deallocate(tt)
 ! =============================== FIN ================================ !
 deallocate(tV)
 deallocate(eta)
