@@ -46,8 +46,13 @@ for j in range(10,15,2):
     VecInFiles.append([acorrFile,PhiFile,PhiSqrFile])
     nroFilesV+=1
 
+for j in range(10,15,2):
+    namearch  = 'VAvsV_variandoN\Entrada_Parametros_Vicsek'+str(j)+'b.dat'
+    acorrFile='VAvsV_variandoN\Acorr2_VV'+str(j)+'_tEq5000.dat'
+    PhiFile='VAvsV_variandoN\CrudosVicsek2V'+str(j)+'_G'+str(int(G))+'p'+str(int(decG*10))+'.dat'
+    PhiSqrFile=''
+    VecInFiles.append([acorrFile,PhiFile,PhiSqrFile])
     
-
 N=[]
 v0=[]
 rho=[]
@@ -64,22 +69,54 @@ for j in range(nroFilesA):
 VA_OBJ=[]
 tACTANG=[]
 ACTANG=[]
-ACTVEC=[]
 for j in range(nroFilesA):
     
     VA_OBJ.append(MSP.AnalysisVicsek(j,AngInFiles[j],'A',parameters[j]))
     
     tACTANG.append(VA_OBJ[j].acorrTime)
     ACTANG.append(VA_OBJ[j].acorr)
-    
-#    AngInFiles[j]
 
+VV_OBJ=[]
+tACTVEC=[]
+ACTVEC=[]
+parametersV=[parameters[k] for k in range(0,len(parameters),2)]
+
+for j in range(nroFilesV):
+    VV_OBJ.append(MSP.AnalysisVicsek(j,
+                                     VecInFiles[j],
+                                     'V',
+                                     parametersV[j]))
+for j in range(nroFilesV):
+    tACTVEC.append(VV_OBJ[j].acorrTime)
+    ACTVEC.append(VV_OBJ[j].acorr)
+    
+VVextra=[]
+for j in range(nroFilesV):
+    VVextra.append(MSP.AnalysisVicsek(j,
+                                     VecInFiles[3+j],
+                                     'V',
+                                     parametersV[j]))
+    
 
 eta=VA_OBJ[0].vicsekNoise
 
 
 labels = [r'$\eta = %s$' % eta[j] for j in range(len(eta))]
 formatACT=['k.-','r.-','m.-','c.-','b.-','g.-','y.-','gv-','kv-','rv-']
+
+'''para ajustar'''    
+def f(x,tau,b,y0): 
+    return b*np.exp(-x/tau) + y0
+
+# armar array con las semillas para cada archivo.
+initGuessA=[[[MidoCada[k],ACTANG[k][j][0],0] for j in range(len(eta))]for k in range(nroFilesA)]#semilla para el ajuste  
+#initGuessA=[[[200,1] for j in range(len(eta))]for k in range(nroFilesA)]
+# obtener el tiempo de eq. para cada curva de ACT
+tauEq_A=[VA_OBJ[k].get_tauEq(f,initGuessA[k]) for k in range(nroFilesA)]
+
+initGuessV=[[[MidoCada[k],ACTVEC[k][j][0],0] for j in range(len(eta))]for k in range(nroFilesV)]#semilla para el ajuste  
+# obtener el tiempo de eq. para cada curva de ACT
+tauEq_V=[VV_OBJ[k].get_tauEq(f,initGuessV[k]) for k in range(nroFilesV)]
 
 graficoACT_A=[]
 for k in range(nroFilesA):
@@ -90,46 +127,116 @@ for k in range(nroFilesA):
             )
     plt.figure(k)
     MSP.Graficador(graficoACT_A[k],'$t [MCS]$','$Acorr$',tituloAcorr)
-    
-'''para ajustar'''    
-def f(x,tau,b,y0): 
-    return b*np.exp(-x/tau) + y0
+#    plt.plot(tACTANG[3],f(tACTANG[3],tauEq_A[3][9],1,0),'b-')
+
+graficoACT_V=[]
+for k in range(nroFilesV):
+    tituloAcorr=r'Vectorial - $N = %s$, $\rho = %s$' %(N[2*k],rho[k])
+    graficoACT_V.append(
+            [[tACTVEC[k],ACTVEC[k][j],None,formatACT[j],labels[j]]
+            for j in range(0,len(eta),3)]
+            )
+    plt.figure(5+k)
+    MSP.Graficador(graficoACT_V[k],'$t [MCS]$','$Acorr$',tituloAcorr)
+
 # =============================================================================
 # def f(x,tau,b): 
 #     return b*np.exp(-x/tau)
 # =============================================================================
-
-# armar array con las semillas para cada archivo.
-initGuessA=[[[MidoCada[k],ACTANG[k][j][0],0] for j in range(len(eta))]for k in range(nroFilesA)]#semilla para el ajuste  
-#initGuessA=[[[200,1] for j in range(len(eta))]for k in range(nroFilesA)]
-# obtener el tiempo de eq. para cada curva de ACT
-tauEq_A=[VA_OBJ[k].get_tauEq(f,initGuessA[k]) for k in range(nroFilesA)]
+#%%
+plt.plot(eta,tauEq_A[3],'o:')
+plt.xlabel(r'$\eta$',size=20)
+plt.ylabel(r'$\tau_{eq}$',size=20)
+plt.title(r'N=%s'%N[3])
+plt.show()
+#%%
+# =============================================================================
+# [plt.plot(eta,tauEq_A[k],'o') for k in range(nroFilesA)]
+# plt.show()
+# =============================================================================
 
 # =============================================================================
-# initGuessV=[[[MidoCada[k],ACTVEC[k][j][0],0] for j in range(len(eta))]for k in range(nroFilesV)]#semilla para el ajuste  
-# # obtener el tiempo de eq. para cada curva de ACT
-# tauEq_V=[VA_OBJ[k].get_tauEq(f,initGuessV[k]) for k in range(nroFilesV)]
+# kTsorted = sorted(kT)
+# print(kTsorted)
+# 
+# Esorted = [x for _,x in sorted(zip(kT,Emean))]
 # =============================================================================
 
 # utilizar tauEq_A para calcular los valores medios
-
 PhiMean_A=[VA_OBJ[k].get_OP_Mean(tauEq_A[k]) for k in range(nroFilesA)]
 PhiErr_A=[VA_OBJ[k].ErrOP(tauEq_A[k]) for k in range(nroFilesA)]
 PhiVar_A=[VA_OBJ[k].get_OP_Var(tauEq_A[k]) for k in range(nroFilesA)]
 PhiCB_A=[VA_OBJ[k]._calc_X_BinderCumulant(tauEq_A[k]) for k in range(nroFilesA)]
 
+PhiMean_V=[VV_OBJ[k].get_OP_Mean(tauEq_V[k]) for k in range(nroFilesV)]
+PhiErr_V=[VV_OBJ[k].ErrOP(tauEq_V[k]) for k in range(nroFilesV)]
+PhiVar_V=[VV_OBJ[k].get_OP_Var(tauEq_V[k]) for k in range(nroFilesV)]
+PhiCB_V=[VV_OBJ[k]._calc_X_BinderCumulant(tauEq_V[k]) for k in range(nroFilesV)]
+
+PhiMean_V_extra=[VVextra[k].get_OP_Mean(tauEq_V[k]) for k in range(nroFilesV)]
+PhiErr_V_extra=[VVextra[k].ErrOP(tauEq_V[k]) for k in range(nroFilesV)]
+PhiVar_V_extra=[VVextra[k].get_OP_Var(tauEq_V[k]) for k in range(nroFilesV)]
+PhiCB_V_extra=[VVextra[k]._calc_X_BinderCumulant(tauEq_V[k]) for k in range(nroFilesV)]
+
+etaextra=VVextra[0].vicsekNoise
+eta2=np.concatenate((eta,etaextra),axis=0)
+eta2S=sorted(eta2)
+
+
+#PhiMean_V[2]=VV_OBJ[2].get_OP_Mean(tauEq_V[2])
+#PhiErr_V[2]=VV_OBJ[2].ErrOP(tauEq_V[2])
+#PhiVar_V[2]=VV_OBJ[2].get_OP_Var(tauEq_V[2])
+
+#unir dos arrays que pertenecen a mismo parámetros
+for k in range(nroFilesV):
+    PhiMean_V[k]=np.concatenate((PhiMean_V[k],PhiMean_V_extra[k]),axis=0)
+    PhiErr_V[k]=np.concatenate((PhiErr_V[k],PhiErr_V_extra[k]),axis=0)
+    PhiVar_V[k]=np.concatenate((PhiVar_V[k],PhiVar_V_extra[k]),axis=0)
+    PhiCB_V[k]=np.concatenate((PhiCB_V[k],PhiCB_V_extra[k]),axis=0)
+
+#PhiMean_V[1]=np.concatenate((PhiMean_V[1],PhiMean_V_extra[1]),axis=0)
+
+#ordenar los arrays segun el ruido para graficarlos
+PhiMean_V=[[x for _,x in sorted(zip(eta2,PhiMean_V[k]))] for k in range(nroFilesV)]
+PhiErr_V=[[x for _,x in sorted(zip(eta2,PhiErr_V[k]))] for k in range(nroFilesV)]
+PhiVar_V=[[x for _,x in sorted(zip(eta2,PhiVar_V[k]))] for k in range(nroFilesV)]
+PhiCB_V=[[x for _,x in sorted(zip(eta2,PhiCB_V[k]))] for k in range(nroFilesV)]
+
+plt.plot(eta2S,PhiVar_V[0],'ro-')
+plt.plot(eta2S,PhiVar_V[1],'bo-')
+plt.plot(eta2S,PhiVar_V[2],'go-')
+plt.show()
+
+#%%
 StatsLabels=[r'$N=%s$'%N[k] for k in range(nroFilesA)]
 #formatos=['yo--','go--','bo--','ro--','mo--']
 formatos=['y.--','g.--','b.--','r.--','m.--']
 
+StatsLabels_V=[r'$N=%s$'%N[2*k] for k in range(nroFilesV)]
+formatosV=['y*--','g*--','r*--','m*--','b*--',]
+
 graficoOP=[[eta,PhiMean_A[k],PhiErr_A[k],formatos[k],StatsLabels[k]] for k in range(nroFilesA)]
 graficoSuc=[[eta,PhiVar_A[k],None,formatos[k],StatsLabels[k]]for k in range(nroFilesA)]
-graficosCB=[[eta[:],PhiCB_A[k][:],None,formatos[k],StatsLabels[k]]for k in range(nroFilesA)]
+graficosCB=[[eta[2:8],PhiCB_A[k][2:8],None,formatos[k],StatsLabels[k]]for k in range(nroFilesA)]
 
-MSP.Graficador(graficoOP,'$\eta$','<|$\phi$|>',None)
-MSP.Graficador(graficoSuc,'$\eta$','Suceptibilidad',None)
-MSP.Graficador(graficosCB,'$\eta$','CumulanteBinder',None)
+graficoOP_V=[[eta2S,PhiMean_V[k],PhiErr_V[k],formatosV[k],StatsLabels_V[k]] for k in range(nroFilesV)]
+graficoSuc_V=[[eta2S,PhiVar_V[k],None,formatosV[k],StatsLabels_V[k]]for k in range(nroFilesV)]
+graficosCB_V=[[eta2S[6:13],PhiCB_V[k][6:13],None,formatosV[k],StatsLabels_V[k]]for k in range(nroFilesV)]
 
+
+plt.figure(9)
+MSP.Graficador(graficoOP,'$\eta$','<|$\phi$|>',r'Limite termodinámico, Angular, $\rho = %s$'%rho[0])
+plt.figure(10)
+MSP.Graficador(graficoSuc,'$\eta$','Susceptibilidad',r'Limite termodinámico, Angular, $\rho = %s$'%rho[0])
+plt.figure(11)
+MSP.Graficador(graficosCB,'$\eta$','CumulanteBinder',r'Limite termodinámico, Angular, $\rho = %s$'%rho[0])
+
+plt.figure(9)
+MSP.Graficador(graficoOP_V,'$\eta$','<|$\phi$|>',r'Limite termodinámico, Vectorial, $\rho = %s$'%rho[0])
+plt.figure(12)
+MSP.Graficador(graficoSuc_V,'$\eta$','Susceptibilidad',r'Limite termodinámico, Vectorial, $\rho = %s$'%rho[0])
+plt.figure(13)
+MSP.Graficador(graficosCB_V,'$\eta$','CumulanteBinder',r'Limite termodinámico, Vectorial, $\rho = %s$'%rho[0])
 
 """ extras"""
 # =============================================================================
