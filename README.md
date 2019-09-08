@@ -27,3 +27,5 @@ Steps to run
 
 For the analysis check the Vicsek_Implementation file
 -----------------------------------------------------
+
+Full notes on the logic of the scripts can be found in the **Memorias Vicsek** file.

@@ -9,9 +9,9 @@ integer::ptos,N
 integer:: t,tfin,temp,dimMido,midoCada,dimACTc
 real:: L,V0,rad,param,eta_0,eta_f,alfa, G
 real,allocatable:: r(:,:),v(:,:),tV(:),eta(:),vx(:),vy(:)
-character(999):: arch_inParam, arch_outSim, arch_outSim_Sqr, auxread,arch_ACT,auxG
+character(999):: arch_inParam, arch_outSim, auxread,arch_ACT,auxG
 character(2):: choise,corrida
-real,allocatable::dv(:,:),phi_mod(:,:),phiSqr_mod(:,:),ACTc(:,:),tt(:)
+real,allocatable::dv(:,:),phi_mod(:,:),ACTc(:,:),tt(:)
 
 
 !======================= ACLARACIONES =======================!
@@ -55,18 +55,6 @@ read(200,*) auxread, midoCada
 read(200,*) auxread, corrida
 read(200,*) auxread, arch_outSim
 
-! read(*,*) auxread, N
-! read(*,*) auxread, V0
-! read(*,*) auxread, L
-! read(*,*) auxread, rad
-! read(*,*) auxread, ptos
-! read(*,*) auxread, eta_0
-! read(*,*) auxread, eta_f
-! read(*,*) auxread, tfin
-! read(*,*) auxread, midoCada
-! read(*,*) auxread, corrida
-! read(*,*) auxread, arch_outSim
-
 
 close(200)
 
@@ -79,7 +67,7 @@ auxread=trim(choise)//trim(corrida)
 select case(choise)
     case("A")
         write(*,*) "Vicsek Angular initialized"
-        arch_outSim_Sqr = trim(arch_outSim)//trim(auxread)//"_Sqr.dat"
+        ! arch_outSim_Sqr = trim(arch_outSim)//trim(auxread)//"_Sqr.dat"
         arch_outSim = trim(arch_outSim)//trim(auxread)//".dat"
         arch_ACT= "ACorr_V"//trim(auxread)//".dat"
     case("V")
@@ -92,7 +80,7 @@ select case(choise)
         ! write(*,*)alfa
         write(auxG,"(A2,I1,A1,I1)") "_G",int(G),'p',int(alfa)
         write(*,*) auxG
-        arch_outSim_Sqr = trim(arch_outSim)//trim(auxread)//trim(auxG)//"_Sqr.dat"
+        ! arch_outSim_Sqr = trim(arch_outSim)//trim(auxread)//trim(auxG)//"_Sqr.dat"
         arch_outSim = trim(arch_outSim)//trim(auxread)//trim(auxG)//".dat"
         arch_ACT= "ACorr_V"//trim(auxread)//trim(auxG)//".dat"
     end select
@@ -117,19 +105,17 @@ dimMido=int(tfin/midoCada)
 allocate(tV(dimMido))
 allocate(vx(dimMido))
 allocate(vy(dimMido))
-! allocate(vvx(dimMido))
-! allocate(vvy(dimMido))
 allocate(phi_mod(dimMido,ptos))
-allocate(phiSqr_mod(dimMido,ptos))
+! allocate(phiSqr_mod(dimMido,ptos))
 
 
 
 phi_mod = 0
-phiSqr_mod = 0
+! phiSqr_mod = 0
 eta=0
 write(*,*) 'OutFiles:'
 write(*,*) arch_outSim
-write(*,*) arch_outSim_Sqr
+! write(*,*) arch_outSim_Sqr
 write(*,*) arch_ACT
 write(*,*) '=============================='
 write(*,*) 'ruido creciente o decreciente (c/d)?'
@@ -186,43 +172,20 @@ deallocate(r)
 deallocate(v)
 deallocate(vx)
 deallocate(vy)
-! deallocate(vvx)
-! deallocate(vvy)
 deallocate(dv)
-! ! ================ CALCULAMOS AutoCorrelacionTemporal ================ !
-! ! dimACTc=dim_vec_eq/2!esto es xq se suele calcular hasta la mitad del vector, luego tengo pocos datos
-! ! dimACTc=dim_vec_eq/2  !checkear q no sea dim_vec_eq/2-1
 
-! dimACTc=dimMido/2
-! allocate(ACTc(dimACTc,ptos))
-! allocate(tt(dimACTc))
-! ACTc=0
-! do temp=1,ptos
-!     call ACTc_Barkema(phi_mod(:,temp),ACTc(:,temp))
-!     end do
-! do t = 1,dimACTc
-!     tt(t)=t
-!     enddo
 
 ! ESCRIBIR EN EL ARCHIVO DE SALIDA LOS DATOS
 open(250,file=arch_outSim)
 call SalidaDatosTabla_tvsX(250,tV,phi_mod,eta,'(A3,999(X,f5.2,X))','(A1,999(X,A5,A1,f4.2,A1))','eta','|phi|')
 close(250)
-
-! open(270,file=arch_outSim_Sqr)
-! call SalidaDatosTabla_tvsX(270,tV,phiSqr_mod,eta,'(A3,999(X,f5.2,X))','(A1,999(X,A9,A1,f4.2,A1))','eta','|phi^2|')
-! close(270)
-
-! open(300,file=arch_ACT)
-! call SalidaDatosTabla_tvsX(300,tt,ACTc,eta,'(A3,999(X,f5.2,X))','(A1,999(X,A4,A1,f4.2,A1))','eta','ACTc')
-! close(300)
-! deallocate(ACTc)
-! deallocate(tt)
 ! =============================== FIN ================================ !
+
+
 deallocate(tV)
 deallocate(eta)
 deallocate(phi_mod)
-deallocate(phiSqr_mod)
+! deallocate(phiSqr_mod)
 
 
 
