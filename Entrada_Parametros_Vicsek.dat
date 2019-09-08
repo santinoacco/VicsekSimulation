@@ -1,0 +1,12 @@
+N= 300
+L= 20
+V0= 1.25
+radio_vision= 1
+puntos_dist_ruido= 10
+Ruido_inicial(entre(0:1])= 0.1
+Ruido_final(entre(0:1])= 0.8
+tiempoFinal(tfin)= 1000
+periodo_de_medicion= 2
+corridaNro= 08
+nombre_archivo_SalidaDatosCrudos: CrudosVicsek
+

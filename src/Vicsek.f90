@@ -75,6 +75,7 @@ write(*,*) "Choose a Model between Angular/Vectorial (A/V)"
 read(*,*) choise
 auxread=trim(choise)//trim(corrida)
 
+! asignación de nombres para archivos de distintas clases.
 select case(choise)
     case("A")
         write(*,*) "Vicsek Angular initialized"
@@ -136,7 +137,9 @@ read(*,*) auxread
 
 ! VARIAMOS EL RUIDO
 do temp=1,ptos !cantidad de puntos con distinto ruido
-    alfa=(real(temp)-1)/(real(ptos)-1)
+    alfa=(real(temp)-1)/(real(ptos)-1) !parametrizar pasos de ruido
+    
+    !opción creciente/decreciente
     if (auxread == 'c') then
         eta(temp) = eta_0 + alfa*(eta_f-eta_0) !va de eta_0 -> eta_f
         else if (auxread == 'd') then
@@ -176,7 +179,6 @@ do temp=1,ptos !cantidad de puntos con distinto ruido
 
             ! CALCULAR P.O temporal
             phi_mod(j,temp)= sqrt(vx(j)*vx(j)+vy(j)*vy(j))/real(N*V0)
-            ! phiSqr_mod(j,temp)= phi_mod(j,temp)**2 ! esto es lo que creo que corresponde.. consultar por las dudas
             end if
         end do
     end do

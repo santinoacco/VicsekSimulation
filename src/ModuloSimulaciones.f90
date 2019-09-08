@@ -117,36 +117,6 @@ module Simulaciones
       return
       end subroutine
     ! ============================== !
-    subroutine ACTc_Barkema(X,ACTc)
-      integer:: t, tmax
-      ! integer,intent(in):: tmax
-      real::aux1,aux2,aux3, norm
-      real,intent(in)::X(:)
-      real, intent(out):: ACTc(:)      
-
-      tmax=size(X)
-
-      ! t=1
-      ! do while(t<=tmax/2)
-      ! do t=1,tmax-1
-      do t=1,tmax/2-1
-        aux3=0
-        aux1=0
-        aux2=0
-        norm = real(1./(tmax-t))
-        do j=1,tmax-t+1
-          aux1 = aux1 + X(j)*X(j+t)
-          aux2 = aux2 + X(j)
-          aux3 = aux3 + X(j+t)
-          enddo
-        ACTc(t) = norm*aux1-aux2*aux3*norm*norm
-        ! ACTc(t)=ACTc(t)/ACTc(1)
-        ! write(*,*)'t:',t
-        ! t=t+1
-        end do
-      return
-      end subroutine ACTc_Barkema
-    ! ============================== !
     subroutine ACT_c(X,ACTc)
         ! integer:: t, tmax,NA
         integer:: t, tmax
@@ -169,17 +139,6 @@ module Simulaciones
         do i=1,tmax
             X(i)= X(i)-Xmean
             end do
-
-        ! ! calculamos ACTc
-        ! do t=1,tmax/2
-        !     aux1=0
-        !     norm = real(1./(tmax-t))
-        !     do j=1,tmax-t+1
-        !         aux1 = aux1 + X(j)*X(j+t)
-        !         ! aux1 = aux1 + X(j)*(X(j+t)-Xmean)
-        !         enddo
-        !     ACTc(t) = norm*aux1
-        !     end do
 
         ! calculamos ACTc
         do t=1,tmax/2
