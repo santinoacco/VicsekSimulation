@@ -41,6 +41,7 @@ call RMARIN(seed,0,0)
 
 ! ******* INGRESAR PARAMETROS DEL SISTEMA ******* !
 ! arch_inParam='Entrada_Parametros_Vicsek.dat'
+write(*,*) "Please write down the InputFile:"
 read(*,*) arch_inParam
 open(200,file=arch_inParam)
 read(200,*) auxread, N
@@ -87,7 +88,7 @@ select case(choise)
 
 param=L/2
 if (eta_0<0 .or. eta_f>1) then
-    stop 'ingreso datos fuera de rango'
+    stop 'input out of range'
 end if
 
 ! *********************************************** !
@@ -131,7 +132,7 @@ do temp=1,ptos !cantidad de puntos con distinto ruido
         else if (auxread == 'd') then
             eta(temp) = eta_f + alfa*(eta_0-eta_f) !va de eta_f -> eta_0 
         else 
-            stop('parametro fuera de rango')
+            stop('parameters out of range')
         end if
 
     write(*,*) 'eta:', eta(temp)

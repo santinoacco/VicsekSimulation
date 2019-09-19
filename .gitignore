@@ -1,7 +1,6 @@
 *.o
 *.mod
 *.bat
-*.pdf
 *.exe
 VA_contrasteACT/
 VA_variandoRho/
@@ -18,3 +17,5 @@ inBatch.txt
 inBatchVec.txt
 PruebaObjetosSimulaciones.py
 VAvsV_variandoN/
+Ginelli*.pdf
+ChateGinelli2008.pdf

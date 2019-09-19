@@ -27,10 +27,10 @@ VecInFiles=[]
 tEqA=[5000,12000,30000,5000,10000]
 tEqV=[5000,5000,5000,5000,5000,]
 for j in range(10,15):
-    namearch  = 'VAvsV_variandoN\Entrada_Parametros_Vicsek'+str(j)+'.dat'
-    acorrFile='VAvsV_variandoN\Acorr_VA'+str(j)+'_tEq'+str(tEqA[j-10])+'.dat'
-    PhiFile='VAvsV_variandoN\CrudosVicsekA'+str(j)+'.dat'
-    PhiSqrFile='VAvsV_variandoN\CrudosVicsekA'+str(j)+'_Sqr.dat'
+    namearch  = '..\VAvsV_variandoN\Entrada_Parametros_Vicsek'+str(j)+'.dat'
+    acorrFile='..\VAvsV_variandoN\Acorr_VA'+str(j)+'_tEq'+str(tEqA[j-10])+'.dat'
+    PhiFile='..\VAvsV_variandoN\CrudosVicsekA'+str(j)+'.dat'
+    PhiSqrFile='..\VAvsV_variandoN\CrudosVicsekA'+str(j)+'_Sqr.dat'
     AngInFiles.append([acorrFile,PhiFile,PhiSqrFile])
     nroFilesA+=1
     InFile.append(namearch)
@@ -38,18 +38,18 @@ for j in range(10,15):
 G=0
 decG = math.modf(G)[0]
 for j in range(10,15,2):
-    namearch  = 'VAvsV_variandoN\Entrada_Parametros_Vicsek'+str(j)+'.dat'
-    acorrFile='VAvsV_variandoN\Acorr_VV'+str(j)+'_G'+str(int(G))+'p'+str(int(decG*10))+'_tEq'+str(tEqV[j-10])+'.dat'
+    namearch  = '..\VAvsV_variandoN\Entrada_Parametros_Vicsek'+str(j)+'.dat'
+    acorrFile='..\VAvsV_variandoN\Acorr_VV'+str(j)+'_G'+str(int(G))+'p'+str(int(decG*10))+'_tEq'+str(tEqV[j-10])+'.dat'
 #    print(acorrFile)
-    PhiFile='VAvsV_variandoN\CrudosVicsekV'+str(j)+'_G'+str(int(G))+'p'+str(int(decG*10))+'.dat'
-    PhiSqrFile='VAvsV_variandoN\CrudosVicsekvV'+str(j)+'_G'+str(int(G))+'p'+str(int(decG*10))+'.dat'
+    PhiFile='..\VAvsV_variandoN\CrudosVicsekV'+str(j)+'_G'+str(int(G))+'p'+str(int(decG*10))+'.dat'
+    PhiSqrFile='..\VAvsV_variandoN\CrudosVicsekvV'+str(j)+'_G'+str(int(G))+'p'+str(int(decG*10))+'.dat'
     VecInFiles.append([acorrFile,PhiFile,PhiSqrFile])
     nroFilesV+=1
 
 for j in range(10,15,2):
-    namearch  = 'VAvsV_variandoN\Entrada_Parametros_Vicsek'+str(j)+'b.dat'
-    acorrFile='VAvsV_variandoN\Acorr2_VV'+str(j)+'_tEq5000.dat'
-    PhiFile='VAvsV_variandoN\CrudosVicsek2V'+str(j)+'_G'+str(int(G))+'p'+str(int(decG*10))+'.dat'
+    namearch  = '..\VAvsV_variandoN\Entrada_Parametros_Vicsek'+str(j)+'b.dat'
+    acorrFile='..\VAvsV_variandoN\Acorr2_VV'+str(j)+'_tEq5000.dat'
+    PhiFile='..\VAvsV_variandoN\CrudosVicsek2V'+str(j)+'_G'+str(int(G))+'p'+str(int(decG*10))+'.dat'
     PhiSqrFile=''
     VecInFiles.append([acorrFile,PhiFile,PhiSqrFile])
     
