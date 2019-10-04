@@ -2,9 +2,10 @@
 *.mod
 *.bat
 *.exe
-VA_contrasteACT/
-VA_variandoRho/
-VA_variandoV0/
+*.lnk
+PyScripts/GraficadorVicsek.py
+Pruebas/
+VAvsV_variandoN/
 paraEntregar/
 Pruebas/
 .ipynb_checkpoints/
@@ -13,8 +14,6 @@ __pycache__/
 Crudos*
 Acorr*
 GraficadorVicsekPrueba.py
-inBatch.txt
-inBatchVec.txt
 PruebaObjetosSimulaciones.py
 VAvsV_variandoN/
 Ginelli*.pdf

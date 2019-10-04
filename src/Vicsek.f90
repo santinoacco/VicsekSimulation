@@ -112,11 +112,10 @@ allocate(phi_mod(dimMido,ptos))
 
 
 phi_mod = 0
-! phiSqr_mod = 0
+
 eta=0
 write(*,*) 'OutFiles:'
 write(*,*) arch_outSim
-! write(*,*) arch_outSim_Sqr
 write(*,*) arch_ACT
 write(*,*) '=============================='
 write(*,*) 'ruido creciente o decreciente (c/d)?'
