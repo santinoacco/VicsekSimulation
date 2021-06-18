@@ -1,5 +1,6 @@
 # Vicsek 2D Simulation
 
+<!-- ## ![Overview](docs/PosterRAFA_Simulaciones.pdf) -->
 ## Overview
 
 This repo contains both the code for the Vicsek2D simulation and the presentation docs (in spanish),
